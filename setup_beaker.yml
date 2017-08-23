@@ -4,16 +4,19 @@
 - hosts: localhost
   become_user: root
   become: yes
-  gather_facts: false
+  gather_facts: true
   tasks:
     - name: ensure python and deps for ansible modules are installed
-      raw: dnf install -y python2 python2-dnf libselinux-python
+      package: name={{item}} state=present
+      with_items:
+        - python
+        - libselinux-python
 
 - hosts: localhost
   sudo: true
 
   vars:
-    user_key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+    user_key: "{{ lookup('file', '~/.ssh/id_rsa_redhat.pub') }}"
     netinstall_url: http://mirror.centos.org/centos/6/os/x86_64
     kickstart_repos:
       install: http://mirror.centos.org/centos/6/os/x86_64/

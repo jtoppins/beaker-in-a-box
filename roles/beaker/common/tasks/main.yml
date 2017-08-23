@@ -32,7 +32,7 @@
   local_action: command ssh-keyscan -T 10 -t rsa {{ network.ip_address }}
   register: local_ssh_host_key
 
-- name: add host key to known hosts file for root@labcontroller
-  known_hosts:
-    key: "{{ local_ssh_host_key.stdout }}"
-    name: "{{ network.ip_address }}"
+#- name: add host key to known hosts file for root@labcontroller
+#  known_hosts:
+#    key: "{{ local_ssh_host_key.stdout }}"
+#    name: "{{ network.ip_address }}"
