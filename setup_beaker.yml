@@ -6,8 +6,13 @@
   become: yes
   gather_facts: false
   tasks:
+    - name: are we running on Fedora?
+      raw: python -c "import platform; import sys; sys.stdout.write(platform.linux_distribution(full_distribution_name=False)[0])"
+      register: host_distro
     - name: ensure python and deps for ansible modules are installed
       raw: dnf install -y python2 python2-dnf libselinux-python
+      when: host_distro.stdout.find('fedora') != -1
+      # only run this on fedora hosts, RHEL doesn't have this problem
 
 - hosts: localhost
   become: true
