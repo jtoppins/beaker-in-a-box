@@ -20,6 +20,8 @@
   vars:
     user_key_path_default: "{{ lookup('env', 'HOME') }}/.ssh/id_rsa.pub"
     user_key: "{{ lookup('file', '{{ user_key_path }}') }}"
+    storage_pool_name_default: "default"
+    storage_min_size: 42949672960
     netinstall_url: http://mirror.centos.org/centos/6/os/x86_64
     kickstart_repos:
       install: http://mirror.centos.org/centos/6/os/x86_64/
@@ -36,6 +38,10 @@
               'mkdir -p ~/.ssh && ssh-keygen'"
       private: no
       default: "{{ user_key_path_default }}"
+    - name: "storage_pool_name"
+      prompt: "What libvirt storage pool would you like to use?"
+      private: no
+      default: "{{ storage_pool_name_default }}"
 
   roles:
     - { role: local, tags: [local] }

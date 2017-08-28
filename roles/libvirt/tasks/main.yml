@@ -27,3 +27,14 @@
   virt_net:
     state: active
     name: "{{ network.name }}"
+
+- name: "does libvirt pool '{{storage_pool_name}}' have >= 40G of total space"
+  virt_pool:
+    command: facts
+  failed_when: ansible_libvirt_pools[storage_pool_name].size_total | version_compare(storage_min_size, '<')
+
+- name: ensure user provided storage pool is active
+  virt_pool:
+    state: active
+    name: "{{ storage_pool_name }}"
+    autostart: yes
