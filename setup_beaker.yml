@@ -18,7 +18,8 @@
   become: true
 
   vars:
-    user_key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+    user_key_path_default: "{{ lookup('env', 'HOME') }}/.ssh/id_rsa.pub"
+    user_key: "{{ lookup('file', '{{ user_key_path }}') }}"
     netinstall_url: http://mirror.centos.org/centos/6/os/x86_64
     kickstart_repos:
       install: http://mirror.centos.org/centos/6/os/x86_64/
@@ -26,6 +27,15 @@
       extras: http://mirror.centos.org/centos/6/extras/x86_64/
       cr: http://mirror.centos.org/centos/6/cr/x86_64/
     user_distros: []
+
+  vars_prompt:
+    - name: "user_key_path"
+      prompt: "What is the absolute path to the public ssh key you wish
+              to use (note: the path cannot include '~')? If you don't
+              have one at all one can be generated with
+              'mkdir -p ~/.ssh && ssh-keygen'"
+      private: no
+      default: "{{ user_key_path_default }}"
 
   roles:
     - { role: local, tags: [local] }
